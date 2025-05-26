@@ -2,8 +2,11 @@ services:
   - type: web
     name: food-api
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app -b 0.0.0.0:$PORT
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
     plan: free
+    envVars:
+      - key: PORT
+        value: 10000
 
 
