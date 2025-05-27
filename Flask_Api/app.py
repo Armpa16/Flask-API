@@ -55,10 +55,10 @@ def get_related_food_types(predicted_food_type):
 def get_user_data(username):
     try:
         conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="food_recommend_system"
+            host="sql109.infinityfree.com",
+            user="if0_39082609",
+            password="armarm0062",
+            database="if0_39082609_food_recomend_system"
         )
         cursor = conn.cursor()
 
