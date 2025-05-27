@@ -153,10 +153,11 @@ def predict_food_type(user_data):
 def get_meal_set(food_type_code, target_calories):
     try:
         conn = mysql.connector.connect(
-            host="localhost",
+            host="yamabiko.proxy.rlwy.net",
+            port=13821, 
             user="root",
-            password="",
-            database="food_recommend_system"
+            password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
+            database="railway"
         )
         cursor = conn.cursor(dictionary=True)
 
@@ -280,10 +281,11 @@ def get_food_list():
 
         # ดึงรายการอาหารจากฐานข้อมูลตามประเภทที่เกี่ยวข้อง
         conn = mysql.connector.connect(
-            host="localhost",
+            host="yamabiko.proxy.rlwy.net",
+            port=13821, 
             user="root",
-            password="",
-            database="food_recommend_system"
+            password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
+            database="railway"
         )
         cursor = conn.cursor(dictionary=True)
 
