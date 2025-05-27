@@ -16,10 +16,10 @@ model = joblib.load('Flask_Api/food_recommendation_model.pkl')
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
-            host="sql109.infinityfree.com",
-            user="if0_39082609",
-            password="armarm0062",
-            database="if0_39082609_food_recomend_system"
+            host="yamabiko.proxy.rlwy.net",
+            user="root",
+            password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
+            database="railway"
         )
         return conn
     except mysql.connector.Error as err:
@@ -55,10 +55,10 @@ def get_related_food_types(predicted_food_type):
 def get_user_data(username):
     try:
         conn = mysql.connector.connect(
-            host="sql109.infinityfree.com",
-            user="if0_39082609",
-            password="armarm0062",
-            database="if0_39082609_food_recomend_system"
+            host="yamabiko.proxy.rlwy.net",
+            user="root",
+            password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
+            database="railway"
         )
         cursor = conn.cursor()
 
