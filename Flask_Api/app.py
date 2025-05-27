@@ -17,6 +17,7 @@ def get_db_connection():
     try:
         conn = mysql.connector.connect(
             host="yamabiko.proxy.rlwy.net",
+            port=13821, 
             user="root",
             password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
             database="railway"
@@ -56,6 +57,7 @@ def get_user_data(username):
     try:
         conn = mysql.connector.connect(
             host="yamabiko.proxy.rlwy.net",
+            port=13821, 
             user="root",
             password="EKRiEnzCXzuGRzsXOanDuXnpFPvzKpOv",
             database="railway"
