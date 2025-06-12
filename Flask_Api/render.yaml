@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   - type: web
     name: food-api
@@ -5,3 +6,15 @@ services:
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn Flask_Api.app:app"
     plan: free
+=======
+services:
+  - type: web
+    name: food-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn Flask_Api.app:app"
+    plan: free
+
+
+
+>>>>>>> 2b423671e2241850b27c438a3f6bb32e6f7881fa
