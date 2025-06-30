@@ -3,6 +3,7 @@ services:
     name: food-api
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn Flask_Api.app:app"
+    startCommand: "gunicorn Flask_Api.app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 300"
     plan: free
+
     
