@@ -947,6 +947,270 @@ def get_food_details():
         if 'conn' in locals() and conn and conn.is_connected(): conn.close()
 
 
+@app.route('/get_protein_for_week', methods=['POST'])
+def get_protein_for_week():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        start_date_str = data.get('startDate')
+        end_date_str = data.get('endDate')
+
+        if not username or not start_date_str or not end_date_str:
+            return jsonify({'error': 'กรุณาระบุชื่อผู้ใช้, วันที่เริ่มต้น, และวันที่สิ้นสุด'}), 400
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # หา user_id จาก username
+        cursor.execute("SELECT users_id FROM users WHERE username = %s", (username,))
+        user_result = cursor.fetchone()
+        if not user_result:
+            return jsonify({'error': 'ไม่พบผู้ใช้'}), 404
+        user_id = user_result['users_id']
+
+        # ดึงข้อมูลโปรตีนรวมต่อวันในช่วงที่กำหนด
+        cursor.execute("""
+            SELECT his_date, SUM(fm.protein) as total_protein
+            FROM food_history fh
+            JOIN food_menu fm ON fh.food_id = fm.food_id
+            WHERE fh.users_id = %s AND fh.his_date BETWEEN %s AND %s
+            GROUP BY his_date
+        """, (user_id, start_date, end_date))
+
+        results = cursor.fetchall()
+        protein_data_by_date = {}
+
+        for row in results:
+            protein_data_by_date[row['his_date'].strftime('%Y-%m-%d')] = {
+                'protein': float(row['total_protein']) if row['total_protein'] is not None else 0.0
+            }
+
+        return jsonify({'proteinData': protein_data_by_date}), 200
+
+    except Exception as e:
+        print(f"❌ Error in get_protein_for_week: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals() and cursor: cursor.close()
+        if 'conn' in locals() and conn and conn.is_connected(): conn.close()
+
+
+@app.route('/get_carbohydrate_for_week', methods=['POST'])
+def get_carbohydrate_for_week():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        start_date_str = data.get('startDate')
+        end_date_str = data.get('endDate')
+
+        if not username or not start_date_str or not end_date_str:
+            return jsonify({'error': 'กรุณาระบุชื่อผู้ใช้, วันที่เริ่มต้น, และวันที่สิ้นสุด'}), 400
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # หา user_id จาก username
+        cursor.execute("SELECT users_id FROM users WHERE username = %s", (username,))
+        user_result = cursor.fetchone()
+        if not user_result:
+            return jsonify({'error': 'ไม่พบผู้ใช้'}), 404
+        user_id = user_result['users_id']
+
+        # ดึงข้อมูลคาร์โบไฮเดรตรวมต่อวันในช่วงที่กำหนด
+        cursor.execute("""
+            SELECT his_date, SUM(fm.carbohydrate) as total_carbohydrate
+            FROM food_history fh
+            JOIN food_menu fm ON fh.food_id = fm.food_id
+            WHERE fh.users_id = %s AND fh.his_date BETWEEN %s AND %s
+            GROUP BY his_date
+        """, (user_id, start_date, end_date))
+
+        results = cursor.fetchall()
+        carbohydrate_data_by_date = {}
+
+        for row in results:
+            carbohydrate_data_by_date[row['his_date'].strftime('%Y-%m-%d')] = {
+                'carbohydrate': float(row['total_carbohydrate']) if row['total_carbohydrate'] is not None else 0.0
+            }
+
+        return jsonify({'carbohydrateData': carbohydrate_data_by_date}), 200
+
+    except Exception as e:
+        print(f"❌ Error in get_carbohydrate_for_week: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals() and cursor: cursor.close()
+        if 'conn' in locals() and conn and conn.is_connected(): conn.close()
+
+
+@app.route('/get_sugar_for_week', methods=['POST'])
+def get_sugar_for_week():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        start_date_str = data.get('startDate')
+        end_date_str = data.get('endDate')
+
+        if not username or not start_date_str or not end_date_str:
+            return jsonify({'error': 'กรุณาระบุชื่อผู้ใช้, วันที่เริ่มต้น, และวันที่สิ้นสุด'}), 400
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # หา user_id จาก username
+        cursor.execute("SELECT users_id FROM users WHERE username = %s", (username,))
+        user_result = cursor.fetchone()
+        if not user_result:
+            return jsonify({'error': 'ไม่พบผู้ใช้'}), 404
+        user_id = user_result['users_id']
+
+        # ดึงข้อมูลคาร์โบไฮเดรตรวมต่อวันในช่วงที่กำหนด
+        cursor.execute("""
+            SELECT his_date, SUM(fm.sugar) as total_sugar
+            FROM food_history fh
+            JOIN food_menu fm ON fh.food_id = fm.food_id
+            WHERE fh.users_id = %s AND fh.his_date BETWEEN %s AND %s
+            GROUP BY his_date
+        """, (user_id, start_date, end_date))
+
+        results = cursor.fetchall()
+        sugar_data_by_date = {}
+
+        for row in results:
+            sugar_data_by_date[row['his_date'].strftime('%Y-%m-%d')] = {
+                'sugar': float(row['total_sugar']) if row['total_sugar'] is not None else 0.0
+            }
+
+        return jsonify({'sugarData': sugar_data_by_date}), 200
+
+    except Exception as e:
+        print(f"❌ Error in get_sugar_for_week: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals() and cursor: cursor.close()
+        if 'conn' in locals() and conn and conn.is_connected(): conn.close()
+
+
+@app.route('/get_fat_for_week', methods=['POST'])
+def get_fat_for_week():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        start_date_str = data.get('startDate')
+        end_date_str = data.get('endDate')
+
+        if not username or not start_date_str or not end_date_str:
+            return jsonify({'error': 'กรุณาระบุชื่อผู้ใช้, วันที่เริ่มต้น, และวันที่สิ้นสุด'}), 400
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # หา user_id จาก username
+        cursor.execute("SELECT users_id FROM users WHERE username = %s", (username,))
+        user_result = cursor.fetchone()
+        if not user_result:
+            return jsonify({'error': 'ไม่พบผู้ใช้'}), 404
+        user_id = user_result['users_id']
+
+        # ดึงข้อมูลคาร์โบไฮเดรตรวมต่อวันในช่วงที่กำหนด
+        cursor.execute("""
+            SELECT his_date, SUM(fm.fat) as total_fat
+            FROM food_history fh
+            JOIN food_menu fm ON fh.food_id = fm.food_id
+            WHERE fh.users_id = %s AND fh.his_date BETWEEN %s AND %s
+            GROUP BY his_date
+        """, (user_id, start_date, end_date))
+
+        results = cursor.fetchall()
+        fat_data_by_date = {}
+
+        for row in results:
+            fat_data_by_date[row['his_date'].strftime('%Y-%m-%d')] = {
+                'fat': float(row['total_fat']) if row['total_fat'] is not None else 0.0
+            }
+
+        return jsonify({'fatData': fat_data_by_date}), 200
+
+    except Exception as e:
+        print(f"❌ Error in get_fat_for_week: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals() and cursor: cursor.close()
+        if 'conn' in locals() and conn and conn.is_connected(): conn.close()
+
+
+@app.route('/get_sodium_for_week', methods=['POST'])
+def get_sodium_for_week():
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        start_date_str = data.get('startDate')
+        end_date_str = data.get('endDate')
+
+        if not username or not start_date_str or not end_date_str:
+            return jsonify({'error': 'กรุณาระบุชื่อผู้ใช้, วันที่เริ่มต้น, และวันที่สิ้นสุด'}), 400
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # หา user_id จาก username
+        cursor.execute("SELECT users_id FROM users WHERE username = %s", (username,))
+        user_result = cursor.fetchone()
+        if not user_result:
+            return jsonify({'error': 'ไม่พบผู้ใช้'}), 404
+        user_id = user_result['users_id']
+
+        # ดึงข้อมูลคาร์โบไฮเดรตรวมต่อวันในช่วงที่กำหนด
+        cursor.execute("""
+            SELECT his_date, SUM(fm.sodium) as total_sodium
+            FROM food_history fh
+            JOIN food_menu fm ON fh.food_id = fm.food_id
+            WHERE fh.users_id = %s AND fh.his_date BETWEEN %s AND %s
+            GROUP BY his_date
+        """, (user_id, start_date, end_date))
+
+        results = cursor.fetchall()
+        sodium_data_by_date = {}
+
+        for row in results:
+            sodium_data_by_date[row['his_date'].strftime('%Y-%m-%d')] = {
+                'sodium': float(row['total_sodium']) if row['total_sodium'] is not None else 0.0
+            }
+
+        return jsonify({'sodiumData': sodium_data_by_date}), 200
+
+    except Exception as e:
+        print(f"❌ Error in get_sodium_for_week: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if 'cursor' in locals() and cursor: cursor.close()
+        if 'conn' in locals() and conn and conn.is_connected(): conn.close()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
